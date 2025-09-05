@@ -12,7 +12,7 @@ $conn = $db->getConnection();
 
 $user_id = $_SESSION['user_id'];
 
-// ✅ Fetch student with details
+
 $stmt = $conn->prepare("
     SELECT s.id AS student_id, s.student_num, s.year_level, u.username, c.course_name, c.course_time
     FROM students s
@@ -31,7 +31,6 @@ if (!$student) {
 $student_id = $student['student_id'];
 $course_time = $student['course_time'];
 
-// ✅ Handle Attendance Submission
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['mark_attendance'])) {
     $date = $_POST['date'];
     $status = $_POST['status'];
@@ -42,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['mark_attendance'])) {
     } else {
         $time_in = $_POST['time_in'];
 
-        // Check if late (15 mins past course time)
         $is_late = 0;
         if ($course_time && strtotime($time_in) > strtotime($course_time) + (15 * 60)) {
             $is_late = 1;
@@ -57,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['mark_attendance'])) {
     exit;
 }
 
-// ✅ Fetch attendance history
 $stmt = $conn->prepare("
     SELECT date, time_in, status, is_late 
     FROM attendance 
@@ -193,4 +190,5 @@ $attendance = $stmt->get_result();
   </script>
 </body>
 </html>
+
 
