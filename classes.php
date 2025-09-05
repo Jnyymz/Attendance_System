@@ -1,10 +1,10 @@
 <?php
-// Database Connection Class
+
 class Database {
     private $host = "localhost";
     private $db_name = "secondact";   
-    private $username = "root";       // use "root" for XAMPP
-    private $password = "";           // empty password for XAMPP
+    private $username = "root";      
+    private $password = "";           
     protected $conn;
 
     public function __construct() {
@@ -23,7 +23,7 @@ class Database {
     }
 }
 
-// Base User Class
+
 class User extends Database {
     public $id;
     public $username;
@@ -45,7 +45,7 @@ class User extends Database {
     }
 }
 
-// Student Class (inherits User)
+
 class Student extends User {
     private $student_id;
 
@@ -54,7 +54,7 @@ class Student extends User {
         $this->student_id = $student_id;
     }
 
-    // View attendance history
+
     public function viewAttendance() {
         $stmt = $this->conn->prepare("
             SELECT date, time_in, status, is_late
@@ -67,16 +67,14 @@ class Student extends User {
     }
 }
 
-// Admin Class (inherits User)
+
 class Admin extends User {
-    // Add a new course
     public function addCourse($courseName) {
         $stmt = $this->conn->prepare("INSERT INTO courses (course_name) VALUES (?)");
         $stmt->bind_param("s", $courseName);
         return $stmt->execute();
     }
 
-    // View attendance by course and year level
     public function viewAttendanceByCourse($course_id, $year_level) {
         $stmt = $this->conn->prepare("
             SELECT u.username, c.course_name, s.year_level,
@@ -94,3 +92,4 @@ class Admin extends User {
     }
 }
 ?>
+
