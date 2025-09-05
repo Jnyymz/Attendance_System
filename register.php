@@ -5,25 +5,22 @@ require_once "classes.php";
 $db = new Database();
 $conn = $db->getConnection();
 
-// Fetch courses for the student dropdown
 $courses = $conn->query("SELECT id, course_name FROM courses");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $role = $_POST['role']; // student or admin
+    $role = $_POST['role']; 
 
-    // Insert into users table
     $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $username, $password, $role);
 
     if ($stmt->execute()) {
         $user_id = $conn->insert_id; 
 
-        // If role is student, insert additional details into students table
         if ($role === "student") {
             $student_num = $_POST['student_num'];
-            $course = $_POST['course']; // this will be course_id
+            $course = $_POST['course']; 
             $year_level = $_POST['year_level'];
 
             $stmt2 = $conn->prepare("INSERT INTO students (user_id, student_num, course_id, year_level) VALUES (?, ?, ?, ?)");
@@ -53,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         field.style.display = (role === "student") ? "block" : "none";
       });
     }
-    // Run once on page load (so it hides fields if Admin is selected by default)
     window.onload = toggleStudentFields;
   </script>
 </head>
@@ -129,3 +125,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 </body>
 </html>
+
