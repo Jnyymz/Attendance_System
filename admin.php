@@ -2,7 +2,7 @@
 session_start();
 require_once "classes.php";
 
-// ✅ Check if user is admin
+
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
     exit;
@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 $db = new Database();
 $conn = $db->getConnection();
 
-// ✅ Handle new course addition
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
     $course_name = trim($_POST['course_name']);
     $course_time = $_POST['course_time'];
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
     }
 }
 
-// ✅ Handle delete course
+
 if (isset($_GET['delete_course'])) {
     $course_id = intval($_GET['delete_course']);
     $stmt = $conn->prepare("DELETE FROM courses WHERE id = ?");
@@ -33,10 +33,10 @@ if (isset($_GET['delete_course'])) {
     exit;
 }
 
-// ✅ Fetch all courses
+
 $courses = $conn->query("SELECT * FROM courses");
 
-// ✅ Fetch attendance records with student + course info
+
 $attendance = $conn->query("
     SELECT a.id, u.username, c.course_name AS course, c.course_time, 
            s.year_level, a.date, a.status, a.is_late
@@ -144,3 +144,4 @@ $attendance = $conn->query("
   </main>
 </body>
 </html>
+
